@@ -1,7 +1,7 @@
 var express = require('express');
 var app = express();
 var aws = require('aws-sdk');
-var queurUrl = "";
+var queueUrl = "";
 var receipt = "";
 
 // Load variables for authentication
@@ -47,7 +47,7 @@ app.get('/sendMessage', function(req,res){
 		DelaySeconds : 0
 	};
 
-	sqs.send(params, function(err, data){
+	sqs.sendMessage(params, function(err, data){
 		if(err){
 			res.send(err);
 		}
@@ -76,7 +76,7 @@ app.get('/receiveMessage', function(req,res){
 
 
 // Delete Message from Queue using the message receipt handle
-app.get('/receiveMessage', function(req,res){
+app.get('/deleteMessage', function(req,res){
 	var params = {
 		QueueUrl : queueUrl,
 		ReceiptHandle : receipt 
@@ -110,7 +110,8 @@ app.get('/purgeQueue', function(req,res){
 });
 
 //Start Server
-var server = app.listen(80, function(){
+//for IPV6 use '::'
+var server = app.listen(80,'::', function(){
 	var host = server.address().address;
 	var port = server.address().port;
 
