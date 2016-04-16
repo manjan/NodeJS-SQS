@@ -57,3 +57,56 @@ app.get('/sendMessage', function(req,res){
 	});
 });
 
+// Receive Message from Queue
+app.get('/receiveMessage', function(req,res){
+	var params = {
+		QueueUrl : queueUrl,
+		VisibilityTimeout : 600 // 10 min wait time
+	};
+
+	sqs.receiveMessage(params, function(err, data){
+		if(err){
+			res.send(err);
+		}
+		else{
+			res.send(data)
+		}	
+	});
+});
+
+
+// Delete Message from Queue using the message receipt handle
+app.get('/receiveMessage', function(req,res){
+	var params = {
+		QueueUrl : queueUrl,
+		ReceiptHandle : receipt 
+	};
+
+	sqs.deleteMessage(params, function(err, data){
+		if(err){
+			res.send(err);
+		}
+		else{
+			res.send(data)
+		}	
+	});
+});
+
+
+//Purge entire Queue
+app.get('/purgeQueue', function(req,res){
+	var params = {
+		QueueUrl : queueUrl,
+	};
+
+	sqs.purgeQueue(params, function(err, data){
+		if(err){
+			res.send(err);
+		}
+		else{
+			res.send(data)
+		}	
+	});
+});
+
+
