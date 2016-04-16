@@ -13,7 +13,7 @@ var sqs = new aws.SQS();
 // Create Queue
 app.get('/createQueue', function(req, res){
 	var params = {
-		QueueName = "FirstQueue"
+		QueueName : "FirstQueue"
 	};
 
 	sqs.createQueue(params, function(err, data){
@@ -107,6 +107,14 @@ app.get('/purgeQueue', function(req,res){
 			res.send(data)
 		}	
 	});
+});
+
+//Start Server
+var server = app.listen(80, function(){
+	var host = server.address().address;
+	var port = server.address().port;
+
+	console.log('Server listing at http://%s:%s',host,port);
 });
 
 
