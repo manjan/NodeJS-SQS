@@ -11,7 +11,7 @@ aws.config.loadFromPath(__dirname + '/config.json');
 var sqs = new aws.SQS();
 
 // Create Queue
-app.get('/create', function(req, res){
+app.get('/createQueue', function(req, res){
 	var params = {
 		QueueName = "FirstQueue"
 	};
@@ -23,5 +23,37 @@ app.get('/create', function(req, res){
 		else{
 			res.send(data)
 		}
+	});
+});
+
+
+// Get List of Queues
+app.get('/listQueue', function(req, res){
+	sqs.listQueues(function(err, data){
+		if(err){
+			res.send(err);
+		}
+		else{
+			res.send(data)
+		}	
+	});
+});
+
+// Send message to queue we created earlier
+app.get('/sendMessage', function(req,res){
+	var params = {
+		MessageBody : 'First Message',
+		QueueUrl : queueUrl,
+		DelaySeconds : 0
 	};
-}
+
+	sqs.send(params, function(err, data){
+		if(err){
+			res.send(err);
+		}
+		else{
+			res.send(data)
+		}	
+	});
+});
+
